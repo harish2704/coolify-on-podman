@@ -51,3 +51,6 @@ podman exec -it --user root coolify chown www-data:root -R /var/www/html/storage
 echo "Patching coolify source code to bypass podman version check"
 podmanVersion=$(podman -v | cut -d ' ' -f3)
 podman exec -it  coolify sed -i "s#docker version|head -2|grep -i version#docker version|head -2|grep -i version| sed 's/$podmanVersion/24.0.0/g' #" /var/www/html/app/Livewire/Boarding/Index.php
+
+echo "starting systemd-vm container"
+podman compose up -d
