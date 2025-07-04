@@ -1,0 +1,20 @@
+services:
+  srv1:
+    build:
+      context: ./dockerfiles
+      dockerfile: systemd-vm.Dockerfile
+    image: systemd-vm
+    tty: true
+    networks:
+      coolify:
+        aliases:
+          - systemd-vm
+    volumes:
+      - /data/coolify/:/data/coolify
+      - ./ssh:/root/.ssh/
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  coolify:
+    name: coolify
+    external: true

@@ -1,0 +1,30 @@
+http:
+  middlewares:
+    check-auth:
+      basicAuth:
+        users:
+          # Create using `htpasswd -n  <any_username>`
+          - 'xxxxxx:$apr1$xxxxxxxx$xxxxxxxxxxxxxxxxxxxxxx'
+  routers:
+    netdata-http:
+      middlewares:
+        - check-auth
+      entryPoints:
+        - http
+      service: netdata
+      rule: Host(`netdata.example.com`)
+    netdata-https:
+      middlewares:
+        - check-auth
+      entryPoints:
+        - https
+      service: netdata
+      rule: Host(`netdata.example.com`)
+      tls:
+        certresolver: letsencrypt
+  services:
+    netdata:
+      loadBalancer:
+        servers:
+          -
+            url: 'http://host.containers.internal:19999'
